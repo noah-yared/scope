@@ -10,8 +10,8 @@ from types import MappingProxyType
 CLRS_TEXT_TRAIN_REPO = 'tomg-group-umd/CLRS-Text-train'
 CLRS_TEXT_TEST_REPO = 'tomg-group-umd/CLRS-Text-test'
 
-# use immutable dataclass for mapped problem type space
-# to avoid spelling bugs below
+# use immutable dataclass for mapped problem
+# type space to avoid spelling bugs below
 @dataclass
 class ProblemType: # readonly problem types
     __slots__ = ()
@@ -24,6 +24,9 @@ class ProblemType: # readonly problem types
     SORTING = "sorting"
     STRINGS = "strings"
 
+# use MappingProxyType to create immutable mapping
+# from input problem space to desired problem space
+# specified by ProblemType dataclass
 PROBLEM_MAPPING = MappingProxyType(dict([
     ("activity_selector", ProblemType.GREEDY),
     ("articulation_points", ProblemType.GRAPHS),
@@ -67,29 +70,29 @@ def download_hf_dataset(hf_repo_id: str) -> str:
     return snapshot_download(repo_id=hf_repo_id, repo_type='dataset', allow_patterns='*.parquet')
 
 
-def get_parquet_filepaths(root: str) -> list[str]:
+def get_parquet_filepaths(root: str) -> list[Path]:
     """
     Given root path to huggingface dataset repo,
     extract the .parquet files from the 'data' subdirectory
-    and output a list of Path objects corresponding to
+    and return a list of Path objects corresponding to
     paths to each of the parquet files on local disk.
     """
     data_path = Path(root) / 'data'
     contents = os.listdir(data_path)
     return [
-        str(data_path / entry)
+        data_path / entry
         for entry in contents
         if entry.lower().endswith('.parquet')
     ]
 
 
-def parse_files_to_df(files: list[str], max_rows: int) -> pd.DataFrame:
+def parse_files_to_df(files: list[Path], max_rows: int) -> pd.DataFrame:
     """
-    Given list of paths to parquet files, parse files
+    Given list of Paths to parquet files, parse files
     to dataframes and output the concatenated dataframe
     (must be homogenously-typed)
     """
-    assert all(f.lower().endswith('.parquet') for f in files), "Must be a .parquet file!"
+    assert all(f.lower().endswith('.parquet') for f in map(str, files)), "Must be a .parquet file!"
     frames = [pd.read_parquet(f) for f in files]
     full_frame = pd.concat(frames, ignore_index=True, sort=False)
 
