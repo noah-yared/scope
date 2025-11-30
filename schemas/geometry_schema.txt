@@ -1,0 +1,52 @@
+GEOMETRY_ALGORITHM_SCHEMA = """--- Geometry Algorithm Schema ---
+
+Input:
+- algorithm: <algorithm_name>                # "segments_intersect", "graham_scan", "jarvis_march"
+- x: [...]                                   # list of x coordinates
+- y: [...]                                   # list of y coordinates
+- example_output: ...                        # optional reference output
+
+Step 1: Preprocessing
+- Form point list P = [(x[i], y[i]) for i in range(n)]
+- For "segments_intersect":
+    Identify endpoints of the two segments from P
+- For "graham_scan" and "jarvis_march":
+    Identify anchor point (lowest y, tie by lowest x)
+
+Step 2: Select geometry procedure
+- segments_intersect:
+    Use orientation tests and bounding box checks to determine intersection
+- graham_scan:
+    Sort points by polar angle with respect to anchor
+    Maintain stack or list for hull construction using left turn tests
+- jarvis_march:
+    Initialize hull with anchor
+    Repeatedly choose the most counterclockwise point relative to the last hull point
+
+Step 3: Iterate through elements
+- segments_intersect:
+    Evaluate orient(a, b, c) for required combinations
+- graham_scan:
+    For each sorted point:
+        While hull has at least two points and last turn is not left:
+            Pop last point from hull
+        Add current point to hull
+- jarvis_march:
+    Loop:
+        From current hull vertex, search all points to find next hull point
+        Append to hull until anchor is reached
+
+Step 4: Final output
+- segments_intersect:
+    Output 1 if segments intersect, else 0
+- graham_scan:
+    Output a binary array of length n marking hull vertices with 1
+- jarvis_march:
+    Output a binary array of length n marking hull vertices with 1
+
+Output:
+{
+    "answer": ...          # integer for intersection, binary list for hull algorithms
+}
+"""
+

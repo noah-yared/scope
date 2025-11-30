@@ -1,0 +1,78 @@
+INPUT
+algorithm: <algorithm_name>
+input: <input_data>
+goal: <brief one-sentence description>
+
+---
+STEP 1: IDENTIFY PATTERN
+Pattern: <binary_split | cross_subproblem | multi_way | recursive_reduction>
+Why: <one sentence explaining why this pattern applies>
+
+---
+STEP 2: BASE CASE
+If size <= <threshold>:
+    return <direct computation>
+
+---
+STEP 3: DIVIDE
+[binary_split / cross_subproblem]
+    mid = len(input) // 2
+    left_part = input[:mid]
+    right_part = input[mid:]
+
+[multi_way]
+    pivot = <pivot selection>
+    parts = partition(input, pivot)  # e.g., [<pivot, =pivot, >pivot]
+
+[recursive_reduction]
+    next_input = <reduced input based on condition>
+
+Applied to input:
+    <show actual division with concrete values>
+
+---
+STEP 4: CONQUER
+[binary_split / cross_subproblem]
+    left_solution = solve(left_part)
+    right_solution = solve(right_part)
+
+[multi_way]
+    solutions = [solve(part) for part in parts]
+
+[recursive_reduction]
+    solution = solve(next_input)
+
+Trace:
+    solve(<subproblem>) → <result>
+    ...
+
+---
+STEP 5: COMBINE
+[binary_split]
+    final_result = merge(left_solution, right_solution)
+
+[cross_subproblem]
+    cross_solution = compute_cross(input, mid):
+        <show key computation with intermediate values>
+    | Candidate | Value |
+    |-----------|-------|
+    | left      |       |
+    | right     |       |
+    | cross     |       |
+    final_result = best(left, right, cross)
+
+[multi_way]
+    final_result = combine(solutions)  # or select relevant partition
+
+[recursive_reduction]
+    final_result = solution  # or apply transformation
+
+final_result = <value>
+
+---
+STEP 6: VERIFY
+Check: <brief confirmation result satisfies goal>
+
+---
+ANSWER
+<answer><result></answer>
