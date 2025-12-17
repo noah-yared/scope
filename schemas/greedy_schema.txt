@@ -1,0 +1,54 @@
+INPUT
+algorithm: <algorithm_name>
+# e.g., Activity Selection, Task Scheduling
+goal: <maximize/minimize> <quantity>
+# e.g., maximize non-overlapping activities, minimize weighted completion time
+items: [{ id: 0, ... }, { id: 1, ... }, ...]
+
+---
+STEP 1: PROBLEM UNDERSTANDING
+Objective: <what to optimize>
+Constraint: <what makes a selection valid>
+
+---
+STEP 2: GREEDY STRATEGY
+Sort by: <property> (<ascending/descending>)
+# Activity Selection: finish time (ascending)
+# Task Scheduling: processing time (ascending) or ratio weight/time (descending)
+Why: <one sentence justification>
+
+Feasibility rule: item.<property> <condition> state.<variable>
+Invariant: <condition that stays true after each selection>
+
+---
+STEP 3: INITIALIZE
+selected = []
+state = { <variable>: <initial_value> }
+
+---
+STEP 4: SORT
+items_sorted = [
+  { id: _, ... },  # rank 0
+  { id: _, ... },  # rank 1
+  ...
+]
+
+---
+STEP 5: ITERATE
+| Rank | ID | Check | Result | Action | State Update |
+|------|----| ------|--------|--------|--------------|
+| 0    |    |       |        |        |              |
+| 1    |    |       |        |        |              |
+...
+
+---
+STEP 6: VERIFY
+Selected: [...]
+Constraint check: <brief confirmation all selected items are valid together>
+
+---
+ANSWER
+selected = [<ids>]
+value = <total>
+
+<answer>[n values: position i = 1 if item i selected, else 0]</answer>
