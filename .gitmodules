@@ -1,0 +1,3 @@
+[submodule "synthetic_clrs"]
+	path = synthetic_clrs
+	url = https://github.com/noah-yared/synthetic-clrs.git
